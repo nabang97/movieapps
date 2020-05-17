@@ -10,6 +10,7 @@ import 'package:movieapps/screens/detail_screen.dart';
 import 'package:movieapps/utils/api_key.dart';
 import 'package:movieapps/utils/database.dart';
 import 'package:movieapps/utils/global.dart';
+import 'package:movieapps/widgets/general_widget.dart' as GeneralStyle;
 import 'package:movieapps/widgets/genre_detail_widget.dart';
 
 class DetailTvScreen extends StatefulWidget {
@@ -318,7 +319,9 @@ class _DetailTvScreenState extends State<DetailTvScreen> {
   Widget _buildCasts() {
     return Column(children: <Widget>[
       _buildSubTitle("Cast"),
-      Container(
+      futureCasts == null || futureCasts.cast.length == 0 ?
+      CircularProgressIndicator()
+          : Container(
           height: 200,
           margin: EdgeInsets.only(left: 30, bottom: 30),
           padding: EdgeInsets.only(top: 10),
@@ -332,7 +335,7 @@ class _DetailTvScreenState extends State<DetailTvScreen> {
                         futureCasts.cast[index].profilePath,
                         futureCasts.cast[index].character);
                   })
-              : CircularProgressIndicator()),
+              : GeneralStyle.buildLinearProgressBar(context)),
     ]);
   }
 
@@ -557,6 +560,8 @@ class _DetailTvScreenState extends State<DetailTvScreen> {
 class DetailSliverDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   final ResultTv movie;
+
+  // ignore: non_constant_identifier_names
   final double rounded_container_height;
 
   DetailSliverDelegate(

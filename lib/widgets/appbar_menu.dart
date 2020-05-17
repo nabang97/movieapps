@@ -17,7 +17,9 @@ class AppBarMovies extends StatelessWidget {
           child: Text(
             titleAppBar,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black54),
+            style: TextStyle(color: Colors.black54,
+                fontFamily: 'FasterOne',
+                fontWeight: FontWeight.bold),
           ),
         ),
         backgroundColor: Colors.white70,

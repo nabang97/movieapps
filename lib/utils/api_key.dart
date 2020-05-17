@@ -263,6 +263,23 @@ class Api {
     }
   }
 
+  Future<PersonTvs> getPersonTvs(int id) async {
+    http.Response response = await http
+        .get("${url}person/${id.toString()}/tv_credits?api_key=$apikey");
+    PersonTvs personTvs =
+    PersonTvs.fromJson(json.decode(response.body));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      log("{$personTvs}");
+      return personTvs;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load list movies');
+    }
+  }
+
   Future getTvGenreList() async {
     final response = await http.get('${url}genre/tv/list?api_key=$apikey');
 

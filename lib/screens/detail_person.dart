@@ -1,10 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:movieapps/models/moviedetail.dart';
 import 'package:movieapps/models/person.dart';
 import 'package:movieapps/utils/api_key.dart';
 import 'package:movieapps/utils/global.dart';
+import 'package:movieapps/widgets/read_more_text.dart';
 
+import '../widgets/general_widget.dart' as GeneralStyle;
 import 'detail_screen_movie.dart';
 
 class DetailPerson extends StatefulWidget {
@@ -19,18 +23,28 @@ class DetailPerson extends StatefulWidget {
 class _DetailPersonState extends State<DetailPerson> {
   PersonDetail person;
   PersonMovies personMovies;
+  PersonTvs personTvs;
+  String dateFormatCustom = "";
+  int age;
 
   // ignore: non_constant_identifier_names
   final double expanded_height = 400;
 
   // ignore: non_constant_identifier_names
   final double rounded_container_height = 50;
+  var formatter = new DateFormat('yyyy-MMMM-dd');
 
   void setPersonDetail() async {
     await Api().getPersonDetail(widget.id).then((value) {
       setState(() {
         person = value;
+        if (value.birthday != null) {
+          dateFormatCustom = DateFormatCustom
+              .convertDate(DateTime.parse(value.birthday))
+              .date;
+        }
       });
+
     }).catchError((error) {
       throw error;
     });
@@ -46,10 +60,22 @@ class _DetailPersonState extends State<DetailPerson> {
     });
   }
 
+  void setCastTvs() async {
+    await Api().getPersonTvs(widget.id).then((value) {
+      setState(() {
+        personTvs = value;
+      });
+    }).catchError((error) {
+      throw error;
+    });
+  }
+
   @override
   void initState() {
+    dateFormatCustom = "";
     setPersonDetail();
     setCastMovies();
+    setCastTvs();
     super.initState();
   }
 
@@ -59,9 +85,13 @@ class _DetailPersonState extends State<DetailPerson> {
       body: CustomScrollView(
         slivers: <Widget>[
           _buildSliverHead(),
-          SliverToBoxAdapter(child: _buildName()),
-          SliverToBoxAdapter(child: _buildOverview()),
-          SliverToBoxAdapter(child: _buildDetail()),
+          SliverToBoxAdapter(
+              child: person != null ? _buildName() : Container()),
+          SliverToBoxAdapter(
+              child: person != null ? _buildOverview() : GeneralStyle
+                  .buildLinearProgressBar(context)),
+          SliverToBoxAdapter(
+              child: person != null ? _buildDetail() : Container()),
         ],
       ),
     );
@@ -101,15 +131,75 @@ class _DetailPersonState extends State<DetailPerson> {
                       alignment: Alignment.topLeft,
                       child: person == null
                           ? CircularProgressIndicator()
-                          : Text(person.name,
+                          : Text("${person.name}",
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 22, fontWeight: FontWeight.bold))),
                 ],
               ),
             )
-          ])
-        ]));
+          ]),
+          dateFormatCustom == "" ? Container() : Container(
+            margin: EdgeInsets.only(top: 10, bottom: 20),
+            child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.cake,
+                    color: Colors.pink,
+                  ),
+                  Container(
+                      padding: EdgeInsets.only(left: 10),
+                      alignment: Alignment.centerLeft,
+                      child: Text("$dateFormatCustom")
+                  ),
+                ]
+            ),
+          ),
+
+          person != null ?
+          Container(
+            margin: EdgeInsets.only(top: 20, bottom: 20),
+            child: Row(
+              children: <Widget>[
+                dateFormatCustom == "" ? Container() : Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      GeneralStyle.buildContentText(
+                          context, person.birthday == null ? "0" : "${DateTime
+                          .now()
+                          .year - DateTime
+                          .parse(person.birthday)
+                          .year}"),
+                      GeneralStyle.buildSubtitleTwo(context, "age")
+                    ],
+                  ),
+                ),
+
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      GeneralStyle.buildContentText(
+                          context, "${person.popularity}"),
+                      GeneralStyle.buildSubtitleTwo(context, "popularity")
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      GeneralStyle.buildContentText(
+                          context, "${person.knownForDepartment}"),
+                      GeneralStyle.buildSubtitleTwo(context, "department")
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ) : CircularProgressIndicator(),
+
+        ]
+        )
+    );
   }
 
   Widget _buildOverview() {
@@ -119,19 +209,22 @@ class _DetailPersonState extends State<DetailPerson> {
         Container(
             margin: EdgeInsets.only(left: 30, top: 5, right: 30),
             alignment: Alignment.topLeft,
-            child: person == null
-                ? CircularProgressIndicator()
-                : Text(
-                    person.biography != ""
-                        ? person.biography
-                        : "not available in our database",
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        height: 1.5,
-                        color: Colors.black54,
-                        fontSize: 13),
-                  ))
+            child: person != null
+                ?
+            ReadMoreText(
+              person.biography,
+              trimLines: 4,
+              colorClickableText: Colors.pink,
+              trimMode: TrimMode.Line,
+              trimCollapsedText: '...Show more',
+              trimExpandedText: ' show less',
+              textAlign: TextAlign.justify,
+
+
+            )
+
+                : CircularProgressIndicator()),
+
       ],
     );
   }
@@ -148,8 +241,10 @@ class _DetailPersonState extends State<DetailPerson> {
   Widget _buildDetail() {
     return Column(children: <Widget>[
       _buildSubTitle("Movie"),
-      Container(
-          height: personMovies != null ? 160 : 35,
+      personMovies == null || personMovies.cast.length == 0 ?
+      Text("data not available")
+          : Container(
+          height: 150,
           child: personMovies != null
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -157,28 +252,80 @@ class _DetailPersonState extends State<DetailPerson> {
                   itemBuilder: (context, index) {
                     return new GestureDetector(
                       child: personMovies.cast[index].movie.posterPath != null
-                          ? CachedNetworkImage(
+                          ? Container(
+                        padding: EdgeInsets.only(
+                            left: index == 0 ? 30 : 10, top: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+
+                          child: CachedNetworkImage(
                               placeholder: (context, image) {
                                 return Image.asset('lib/images/user.png',
-                                    fit: BoxFit.cover, height: 150, width: 100);
+                                    fit: BoxFit.cover, height: 150);
                               },
                               imageUrl: getPosterImage(
                                   "${personMovies.cast[index].movie.posterPath}"),
                               height: 150,
-                              width: 100,
-                            )
+                          ),
+                        ),
+                      )
                           : Image.asset('lib/images/user.png',
-                              height: 150, width: 100),
+                          height: 150, width: 100),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DetailMovieScreen(
-                                  personMovies.cast[index].movie)),
+                              builder: (context) =>
+                                  DetailMovieScreen(
+                                      personMovies.cast[index].movie)),
                         );
                       },
                     );
                   })
+              : CircularProgressIndicator()),
+      _buildSubTitle("TV Show"),
+      personTvs == null || personTvs.cast.length == 0 ?
+      Text("data not available")
+          : Container(
+          margin: EdgeInsets.only(bottom: 30),
+          height: 150,
+          child: personTvs != null
+              ? ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: personTvs.cast.length,
+              itemBuilder: (context, index) {
+                return new GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        left: index == 0 ? 30 : 10, top: 20),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+
+                      child: personTvs.cast[index].movie.posterPath != null
+                          ?
+                      CachedNetworkImage(
+                        placeholder: (context, image) {
+                          return Image.asset('lib/images/user.png',
+                              fit: BoxFit.cover);
+                        },
+                        imageUrl: getPosterImage(
+                            "${personTvs.cast[index].movie.posterPath}"),
+
+                      ) : Image.asset('lib/images/user.png',
+                          width: 90),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              DetailMovieScreen(
+                                  personTvs.cast[index].movie)),
+                    );
+                  },
+                );
+              })
               : CircularProgressIndicator()),
     ]);
   }

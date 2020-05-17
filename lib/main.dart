@@ -6,6 +6,7 @@ import 'package:movieapps/widgets/_tvshow.dart';
 import 'package:movieapps/widgets/discover.dart';
 
 void main() => runApp(MaterialApp(
+
     debugShowCheckedModeBanner: false,
     theme: ThemeData(fontFamily: 'Montserrat'),
     color: Colors.white,

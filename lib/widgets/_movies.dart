@@ -10,6 +10,9 @@ import 'package:movieapps/models/moviedetail.dart';
 import 'package:movieapps/screens/detail_screen_movie.dart';
 import 'package:movieapps/utils/api_key.dart';
 import 'package:movieapps/utils/global.dart';
+import 'package:movieapps/widgets/general_widget.dart' as GeneralStyle;
+
+import 'appbar_menu.dart';
 
 class MoviesPage extends StatefulWidget with NavigationStates {
   @override
@@ -60,7 +63,16 @@ class _MoviesPageState extends State<MoviesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _init();
+    return Stack(
+      children: <Widget>[
+        AppBarMovies(titleAppBar: 'Movie'),
+        Positioned(
+            top: 100,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _init())
+      ],);
   }
 
   Widget _init() {
@@ -130,20 +142,7 @@ class _MoviesPageState extends State<MoviesPage> {
                       autoPlay: true),
                 );
               }
-
-              if (snapshot.hasData == false) {
-                return Container(
-                  height: 80.0,
-                  decoration: BoxDecoration(color: Colors.grey),
-                  child: Center(
-                    child: Text(
-                      'Error',
-                      style: TextStyle(fontSize: 10.0),
-                    ),
-                  ),
-                );
-              }
-
+//
               if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
@@ -151,15 +150,7 @@ class _MoviesPageState extends State<MoviesPage> {
                 return Text("Connection not available");
               }
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  decoration: BoxDecoration(color: Colors.grey),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-              return CircularProgressIndicator();
+              return GeneralStyle.buildLinearProgressBar(context);
             }),
       ),
     );
@@ -241,12 +232,14 @@ class _MoviesPageState extends State<MoviesPage> {
                             child: Center(
                                 child: Text(
                               snapshot.data[index].name.toString(),
-                              style: TextStyle(color: Colors.black54),
+                                  style: TextStyle(color: _selectedGenreIndex ==
+                                      index ? Colors.black : Colors.black54,
+                                      fontSize: _selectedGenreIndex == index
+                                          ? 15
+                                          : 14),
                             )),
                             decoration: new BoxDecoration(
-                                color: _selectedGenreIndex == index
-                                    ? Colors.grey
-                                    : Colors.white,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(50),
                                 border: Border.all(
                                   width: 1,
@@ -260,7 +253,7 @@ class _MoviesPageState extends State<MoviesPage> {
               } else if (snapshot.hasError) {
                 return Text(snapshot.error);
               }
-              return CircularProgressIndicator();
+              return Container();
             }),
       );
 }

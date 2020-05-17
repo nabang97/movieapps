@@ -9,6 +9,7 @@ import 'package:movieapps/screens/detail_screen_tv.dart';
 import 'package:movieapps/utils/database.dart';
 import 'package:movieapps/utils/global.dart';
 
+import 'appbar_menu.dart';
 class FavoritePage extends StatefulWidget with NavigationStates {
   @override
   _FavoritePageState createState() => _FavoritePageState();
@@ -61,15 +62,24 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   Widget build(BuildContext context) {
-    return _init();
+    return Stack(
+      children: <Widget>[
+        AppBarMovies(titleAppBar: 'Favorites'),
+        Positioned(
+            top: 100,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _init())
+      ],);
+
   }
 
   Widget _init() {
-    List<String> menu = ['Movie', 'TV Show', 'Actors'];
+    List<String> menu = ['Movie', 'TV Show'];
     List<Widget> _discoverOptions = <Widget>[
       _discoverMovies(),
-      _discoverTvShows(),
-      Container()
+      _discoverTvShows()
 //      _discoverTvs(),
 //      _buildActors()
     ];
@@ -114,8 +124,8 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Widget _discoverMovies() => Container(
-        child: Center(
-            child: CarouselSlider.builder(
+    child: Center(
+        child: CarouselSlider.builder(
           itemCount: filteredMovies.length,
           itemBuilder: (context, index) {
             if (filteredMovies.length != 0) {
@@ -267,162 +277,4 @@ class _FavoritePageState extends State<FavoritePage> {
                 ))),
       ));
 
-//  Widget _genreMenu() => Container(
-//    width:double.infinity,
-//    height: 60,
-//    child:
-//    FutureBuilder(
-//      future: _selectedMenu > 0 ? tvGenres : movieGenres  ,
-//      builder: (context,snapshot){
-//        if(snapshot.hasData){
-//          return ListView.builder(
-//            scrollDirection: Axis.horizontal,
-//            itemCount: snapshot.data.length,
-//            itemBuilder: (context, index){
-//              return GestureDetector(
-//                child: Container(
-//                margin: const EdgeInsets.symmetric(horizontal : 15.0,vertical : 15.0),
-//                padding: const EdgeInsets.symmetric(horizontal : 10.0,vertical : 5.0),
-//                child: Center(
-//                  child :Text(
-//                  snapshot.data[index].name.toString(),
-//                  style: TextStyle(
-//                    color: Colors.black54
-//                  ),
-//                  )
-//                ),
-//                decoration: new BoxDecoration(
-//                  color: _selectedGenreIndex == index ? Colors.grey : Colors.white,
-//                  borderRadius: BorderRadius.circular(50),
-//                  border: Border.all(
-//                    width: 1,
-//                    color: Colors.grey[300],
-//
-//                  )
-//                ),
-//              ),
-//              onTap: () => _onSelectedGenre(index,snapshot.data[index].id)
-//              );
-//            }
-//          );
-//      }else if(snapshot.hasError){
-//        return Text(snapshot.error);
-//      }
-//        return CircularProgressIndicator();
-//      }
-//    ),
-//  );
-
-//  Widget _buildActors() {
-//    return SingleChildScrollView(
-//    child : Container(
-//      child: Center(
-//        child: FutureBuilder<Persons>(
-//            future: futurePersons,
-//            builder:(context,snapshot){
-//              if(snapshot.hasData){
-//                return CarouselSlider.builder(
-//                  itemCount: snapshot.data.results.length,
-//                  itemBuilder: (context, index){
-//                    return Container(
-//                        child : _imageActorCarousel(snapshot.data.results, index)
-//                    );
-//                  },
-//                  // items: listCarousel,
-//                  options: CarouselOptions(
-//                      aspectRatio: 0.6,
-//                      height: 560,
-//                      enlargeCenterPage: true,
-//                      autoPlay: true
-//                  ),
-//                );
-//              }
-//              if (snapshot.hasError) {
-//                return Text("${snapshot.error}");
-//              }
-//              if(snapshot.connectionState==ConnectionState.none){
-//                return Text("Connection not available");
-//              }
-//
-//
-//              return CircularProgressIndicator();
-//            }
-//
-//        ),
-//      ),
-//    )
-//    );
-//  }
-
-//  Widget _imageActorCarousel(List<Person> results, int index) =>Stack(
-//      children: <Widget>[
-//        new GestureDetector(
-//          onTap: () {
-//            Navigator.push(context,
-//              MaterialPageRoute(
-//                builder: (context) => _selectedMenu == 0 ? null : null,
-//
-//              ),
-//            );
-//          },
-//          child: Container(
-//            child:
-//                ClipRRect(
-//                    borderRadius: BorderRadius.circular(20),
-//                    child:
-//                    Hero(
-//                        tag: "${results[index].id}",
-//                        child : Material(
-//                          child : results[index].profilePath == null ?
-//                          Image.asset('lib/images/user.png', width: 300, fit:BoxFit.cover) :
-//                          CachedNetworkImage(
-//                              placeholder: (context, image){
-//                                return Image.asset('lib/images/user.png', fit: BoxFit.cover, width: 300);
-//                              },
-//                              imageUrl : getPosterImage("${results[index].profilePath}"),
-//    //                      imageBuilder: (context, imageProvider) => Container(
-//    //                        width: 300,
-//    //                        decoration: BoxDecoration(
-//    //                          image: DecorationImage(
-//    //                              image: imageProvider,
-//    //                              fit: BoxFit.cover,
-//    //                              colorFilter:
-//    //                              ColorFilter.mode(Colors.pink, BlendMode.colorBurn)),
-//    //                        ),
-//    //                      ),
-//                              errorWidget: (context, url, error) => Icon(Icons.error),
-//                              fit: BoxFit.cover,
-//                              width: 300
-//                          ),
-//                        )
-//                    )
-//                ),
-//
-//            margin: EdgeInsets.symmetric(vertical: 30),
-//            decoration: new BoxDecoration(
-//              boxShadow: [
-//                new BoxShadow(
-//                  color: Colors.grey[300],
-//                  blurRadius: 20.0, // has the effect of softening the shadow
-//                  spreadRadius: 2.0, // has the effect of extending the shadow
-//                  offset: Offset(
-//                    5.0, // horizontal, move right 10
-//                    5.0, // vertical, move down 10
-//                  ),
-//                )
-//              ],
-//            ),
-//          )
-//      ),
-//    Positioned(
-//        top: 500,
-//        child :Text("${results[index].name}",
-//            style: TextStyle(
-//              fontWeight: FontWeight.bold,
-//              fontSize: 20
-//            )
-//        )
-//    )
-//  ],
-//  );
 }

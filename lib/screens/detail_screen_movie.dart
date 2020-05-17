@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:movieapps/models/casts.dart';
 import 'package:movieapps/models/genre.dart';
 import 'package:movieapps/models/moviedetail.dart';
+import 'package:movieapps/screens/detail_person.dart';
 import 'package:movieapps/utils/api_key.dart';
 import 'package:movieapps/utils/database.dart';
 import 'package:movieapps/utils/global.dart';
@@ -165,9 +166,11 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
     return Scaffold(
       body: CustomScrollView(
         scrollDirection: Axis.vertical,
+
         slivers: <Widget>[
           _buildSliverHead(),
-          SliverToBoxAdapter(child: _buildDetail())
+          SliverToBoxAdapter(child:
+          _buildDetail())
         ],
       ),
     );
@@ -184,8 +187,12 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
     log(widget.movie.id.toString());
     return Container(
         color: Colors.white,
-        height: MediaQuery.of(context).size.height,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height + 200,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
                 margin: EdgeInsets.symmetric(horizontal: 30),
@@ -208,36 +215,36 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                                   child: futureMovie.releaseDate == null
                                       ? CircularProgressIndicator()
                                       : Text("${futureMovie.releaseDate.year}",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.normal,
-                                              height: 2)))
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal,
+                                          height: 2)))
                             ],
                           ),
                         ),
                         castLoadDone != true
                             ? Container()
                             : GestureDetector(
-                                child: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      color: futureMovie.favorite == null
-                                          ? Colors.pink
-                                          : checkColor(),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
-                                  child: Icon(
-                                      futureMovie.favorite == null
-                                          ? Icons.add
-                                          : checkIcon(),
-                                      color: Colors.white),
-                                ),
-                                onTap: () {
-                                  onPressFavorite();
-                                },
-                              )
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                color: futureMovie.favorite == null
+                                    ? Colors.pink
+                                    : checkColor(),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(10))),
+                            child: Icon(
+                                futureMovie.favorite == null
+                                    ? Icons.add
+                                    : checkIcon(),
+                                color: Colors.white),
+                          ),
+                          onTap: () {
+                            onPressFavorite();
+                          },
+                        )
                       ],
                     ),
                   ],
@@ -253,7 +260,7 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                 border: Border(
 //                  top: BorderSide(width: 1.0, color: Colors.black26),
 //                  bottom: BorderSide(width: 1.0, color: Colors.black26),
-                    ),
+                ),
               ),
               margin: EdgeInsets.only(left: 30, right: 30, top: 15),
               padding: EdgeInsets.symmetric(vertical: 15),
@@ -264,7 +271,7 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                           decoration: new BoxDecoration(
                             border: Border(
                               right:
-                                  BorderSide(width: 1.0, color: Colors.black26),
+                              BorderSide(width: 1.0, color: Colors.black26),
                             ),
                           ),
                           child: Column(
@@ -295,33 +302,33 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                           ))),
                   Expanded(
                       child: Column(
-                    children: <Widget>[
-                      Icon(
-                        Icons.chat,
-                        color: Colors.green,
-                        size: 35,
-                      ),
+                        children: <Widget>[
+                          Icon(
+                            Icons.chat,
+                            color: Colors.green,
+                            size: 35,
+                          ),
 //
-                      spokenLanguages.length == 0
-                          ? CircularProgressIndicator()
-                          : RichText(
+                          spokenLanguages.length == 0
+                              ? CircularProgressIndicator()
+                              : RichText(
                               text: TextSpan(
-                              text: "$language",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Colors.black),
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: '/${widget.movie.originalLanguage}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 15,
-                                        color: Colors.black54))
-                              ],
-                            ))
-                    ],
-                  )),
+                                text: "$language",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.black),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: '/${widget.movie.originalLanguage}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 15,
+                                          color: Colors.black54))
+                                ],
+                              ))
+                        ],
+                      )),
                 ],
               ),
             ),
@@ -339,26 +346,28 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                       fontSize: 13),
                 )),
             _buildSubTitle("Casts"),
-            Expanded(
-                flex: 10,
+            Flexible(
+                fit: FlexFit.loose,
                 child: Container(
+                    height: 200,
                     margin: EdgeInsets.only(left: 30, bottom: 30),
                     padding: EdgeInsets.only(top: 10),
                     child: futureCasts != null
                         ? ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: futureCasts.cast.length,
-                            itemBuilder: (context, index) {
-                              return _buildCastProfile(
-                                  futureCasts.cast[index].name,
-                                  futureCasts.cast[index].profilePath,
-                                  futureCasts.cast[index].character);
-                            })
+                        scrollDirection: Axis.horizontal,
+                        itemCount: futureCasts.cast.length,
+                        itemBuilder: (context, index) {
+                          return _buildCastProfile(
+                              futureCasts.cast[index].id,
+                              futureCasts.cast[index].name,
+                              futureCasts.cast[index].profilePath,
+                              futureCasts.cast[index].character);
+                        })
                         : CircularProgressIndicator()
 //                  }
 //                  return CircularProgressIndicator();
 //                }
-                    ))
+                ))
           ],
         ));
   }
@@ -370,18 +379,23 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
     } else {}
   }
 
-  Widget _buildCastProfile(String name, String profilePath, String character) {
+  Widget _buildCastProfile(int id, String name, String profilePath,
+      String character) {
     return Container(
+        height: 200,
         margin: EdgeInsets.only(right: 12),
-        child: Column(children: <Widget>[
-          Container(
-              alignment: Alignment.center,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: profilePath == null
-                      ? Image.asset('lib/images/user.png',
-                          width: 70, fit: BoxFit.cover)
-                      : CachedNetworkImage(
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: profilePath == null
+                            ? Image.asset('lib/images/user.png',
+                            width: 70, fit: BoxFit.cover)
+                            : CachedNetworkImage(
                           placeholder: (context, image) {
                             return Image.asset('lib/images/user.png',
                                 width: 70, fit: BoxFit.cover);
@@ -390,28 +404,38 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                           width: 70,
                           fit: BoxFit.cover,
                           height: 70,
-                        ))),
-          Container(
-              width: 70,
-              margin: EdgeInsets.only(top: 10),
-              child: Text(
-                name,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-              )),
-          Container(
-              width: 70,
-              margin: EdgeInsets.only(top: 10),
-              alignment: Alignment.center,
-              child: Text(
-                character,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 13,
-                    color: Colors.black54),
-              )),
-        ]));
+                        )),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailPerson(id: id),
+                        ),
+                      );
+                    },
+                  )
+              ),
+              Container(
+                  width: 70,
+                  margin: EdgeInsets.only(top: 10),
+                  child: Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  )),
+              Container(
+                  width: 70,
+                  margin: EdgeInsets.only(top: 10),
+                  alignment: Alignment.center,
+                  child: Text(
+                    character,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 13,
+                        color: Colors.black54),
+                  )),
+            ]));
   }
 
   Widget _buildSubTitle(String s) => Container(

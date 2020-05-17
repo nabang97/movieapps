@@ -30,8 +30,10 @@ class Person {
   int id;
   List<KnownFor> knownFor;
   String name;
+  int gender;
 
-  Person({this.profilePath, this.adult, this.id, this.knownFor, this.name});
+  Person(
+      {this.profilePath, this.adult, this.id, this.knownFor, this.name, this.gender});
 
   factory Person.fromJson(Map<String, dynamic> json) => Person(
       profilePath: json['profile_path'],
@@ -41,14 +43,18 @@ class Person {
           ? List<KnownFor>.from(
               json["known_for"].map((x) => KnownFor.fromJson(x)))
           : List<KnownFor>(),
-      name: json['name']);
+      name: json['name'],
+      gender: json['gender']
+  );
+
 
   Map<String, dynamic> toJson() => {
         "profile_path": profilePath,
         "adult": adult,
         "id": id,
         "known_for": List<dynamic>.from(knownFor.map((x) => x.toJson())),
-        "name": name
+    "name": name,
+    "gender": gender
       };
 }
 
@@ -75,7 +81,6 @@ class PersonDetail {
   String deathDay;
   int id;
   String name;
-
 //  List<String> alsoKnownAs;
   int gender;
   String biography;

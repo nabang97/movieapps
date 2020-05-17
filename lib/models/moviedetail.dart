@@ -1,4 +1,5 @@
 import 'package:movieapps/models/genre.dart';
+import 'package:intl/intl.dart';
 
 class Result {
   double popularity;
@@ -108,6 +109,30 @@ class Result {
       runtime: json["runtime"],
 //        spokenLanguage: json["spoken_languages"] != null ? List<SpokeLanguage>.from(json["spoken_languages"].map((x) => SpokeLanguage.fromJson(x))) : List<SpokeLanguage>(),
       favorite: json['favorite'] == 1 ? true : false);
+}
+
+class DateFormatCustom {
+  String date;
+
+  DateFormatCustom({this.date});
+
+  factory DateFormatCustom.convertDate(DateTime d)=>
+      DateFormatCustom(
+          date: convertDateToString(d)
+      );
+
+}
+
+String convertDateToString(DateTime d) {
+  var formatter = new DateFormat('yyyy-MMMM-dd');
+  var newFormat = formatter.format(d);
+  List<String> splitNewDate = newFormat.split("-");
+  String day = splitNewDate[2];
+  String month = splitNewDate[1];
+  String year = splitNewDate[0];
+
+  String finalFormat = "$month $day, $year";
+  return finalFormat;
 }
 
 class Dates {

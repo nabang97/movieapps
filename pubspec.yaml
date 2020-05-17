@@ -61,6 +61,13 @@ flutter:
         - asset: lib/fonts/Montserrat-Regular.ttf
         - asset: lib/fonts/Montserrat-Italic.ttf
           style: italic
+    - family: Bangers
+      fonts:
+        - asset: lib/fonts/Bangers-Regular.ttf
+          weight: 900
+    - family: FasterOne
+      fonts:
+        - asset: lib/fonts/FasterOne-Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

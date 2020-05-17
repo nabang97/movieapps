@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapps/bloc/navigation_bloc/navigation_bloc.dart';
+import 'package:movieapps/models/genre.dart';
 import 'package:movieapps/models/movie.dart';
 import 'package:movieapps/models/moviedetail.dart';
 import 'package:movieapps/models/person.dart';
@@ -16,6 +17,9 @@ import 'package:movieapps/screens/detail_screen_tv.dart';
 import 'package:movieapps/utils/api_key.dart';
 import 'package:movieapps/utils/database.dart';
 import 'package:movieapps/utils/global.dart';
+import 'package:movieapps/widgets/general_widget.dart' as GeneralStyle;
+
+import 'appbar_menu.dart';
 
 class DiscoverPage extends StatefulWidget with NavigationStates {
   @override
@@ -26,10 +30,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
   static Future<Movies> futureMovie;
   static Future<TvShows> futureTvShow;
   static Future<Persons> futurePersons;
-  static List<dynamic> movieGenres = List();
+  static List<GenreModel> movieGenres = List();
   static int _selectedMenu = 0;
-  static List<dynamic> genres = List();
-  static List<dynamic> tvGenres = List();
+  static List<GenreModel> genres = List();
+  static List<GenreModel> tvGenres = List();
+  static int selectedGender;
 
   void _onMenuTapped(int index) {
     setState(() {
@@ -45,6 +50,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
       _selectedGenreIndex = index;
       futureTvShow = Api().getFetchTvs(genreId);
       futureMovie = Api().getFetchMovies(genreId);
+    });
+  }
+
+  void _onSelectedGender(int index) {
+    setState(() {
+      selectedGender = index;
+      futurePersons = Api().getFetchPersons();
     });
   }
 
@@ -89,7 +101,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
       setState(() {
         tvGenres = resultTv;
       });
+
     }
+    getGenres();
   }
 
   void getGenres() {
@@ -102,15 +116,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
         genres = tvGenres;
       });
     }
+    print("Please... ${genres.length}");
   }
 
   @override
   void initState() {
     super.initState();
-
+    futureMovie = Api().getFetchMovies(null);
     futurePersons = Api().getFetchPersons();
-    movieGenres = [];
-    tvGenres = [];
     checkGenres();
     checkActors();
     addLanguages();
@@ -118,7 +131,16 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _init();
+    return Stack(
+      children: <Widget>[
+        AppBarMovies(titleAppBar: 'DISCOVER'),
+        Positioned(
+            top: 100,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _init())
+      ],);
   }
 
   Widget _init() {
@@ -128,12 +150,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
       _discoverTvs(),
       _buildActors()
     ];
+    List<String> menuPerson = ['All', 'Female', 'Male'];
 
     return Container(
         child: SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
               height: 50,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -158,12 +182,20 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             onTap: () {
                               _onMenuTapped(index);
                               _onSelectedGenre(null, null);
+                              _onSelectedGender(0);
                             },
                           )),
                     );
-                  })),
-          _selectedMenu == 2 ? Container() : _genreMenu(),
-          _discoverOptions.elementAt(_selectedMenu)
+                  }
+              )
+              ),
+              _selectedMenu == 2 ? _filterMenu(menuPerson) : _genreMenu(),
+              Flexible(
+                  fit: FlexFit.loose,
+                  child: _discoverOptions.elementAt(_selectedMenu)
+              )
+
+
         ],
       ),
     ));
@@ -194,11 +226,16 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }
+
                 if (snapshot.connectionState == ConnectionState.none) {
-                  return Text("Connection not available");
+                  return Align(
+                      alignment: Alignment.center,
+                      child: Text("Connection is not available")
+                  );
                 }
 
-                return CircularProgressIndicator();
+
+                return GeneralStyle.buildLinearProgressBar(context);
               }),
         ),
       );
@@ -229,7 +266,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 if (snapshot.connectionState == ConnectionState.none) {
                   return Text("Connection not available");
                 }
-                return CircularProgressIndicator();
+                return GeneralStyle.buildLinearProgressBar(context);
               }),
         ),
       );
@@ -356,12 +393,12 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _genreMenu() => Container(
       width: double.infinity,
       height: 60,
-      child: genres == null
-          ? Container(child: CircularProgressIndicator())
-          : ListView.builder(
+      child: genres.length == 0 ? CircularProgressIndicator() :
+      ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: genres.length,
               itemBuilder: (context, index) {
+                print('Genres ------------- ${genres.length}');
                 return GestureDetector(
                     child: Container(
                       margin: const EdgeInsets.symmetric(
@@ -370,13 +407,17 @@ class _DiscoverPageState extends State<DiscoverPage> {
                           horizontal: 10.0, vertical: 5.0),
                       child: Center(
                           child: Text(
-                        genres[index].name.toString(),
-                        style: TextStyle(color: Colors.black54),
-                      )),
+                            genres[index].name.toString(),
+
+                            style: TextStyle(
+                                color: _selectedGenreIndex == index ? Colors
+                                    .black : Colors.black54,
+                                fontSize: _selectedGenreIndex == index
+                                    ? 15
+                                    : 14),
+                          )),
                       decoration: new BoxDecoration(
-                          color: _selectedGenreIndex == index
-                              ? Colors.grey
-                              : Colors.white,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(50),
                           border: Border.all(
                             width: 1,
@@ -386,6 +427,40 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     onTap: () => _onSelectedGenre(index, genres[index].id));
               }));
 
+  Widget _filterMenu(List<String> menu) =>
+      Container(
+          width: double.infinity,
+          height: 60,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: menu.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 15.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 5.0),
+                      child: Center(
+                          child: Text(
+                            menu[index],
+                            style: TextStyle(color: selectedGender == index
+                                ? Colors.black
+                                : Colors.black54,
+                                fontSize: selectedGender == index ? 15 : 14),
+                          )),
+                      decoration: new BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.grey[300],
+                          )),
+                    ),
+                    onTap: () => _onSelectedGender(index)
+                );
+              }));
+
   Widget _buildActors() {
     return SingleChildScrollView(
         child: Container(
@@ -393,13 +468,36 @@ class _DiscoverPageState extends State<DiscoverPage> {
         child: FutureBuilder<Persons>(
             future: futurePersons,
             builder: (context, snapshot) {
+              print("SlectedGEnder: $selectedGender");
               if (snapshot.hasData) {
-                return CarouselSlider.builder(
-                  itemCount: snapshot.data.results.length,
+                List<Person> femaleList = [];
+                List<Person> maleList = [];
+                List<Person> allList = [];
+                snapshot.data.results.forEach((element) {
+                  print(element);
+                  if (element.gender == 1) {
+                    femaleList.add(element);
+                  }
+                  if (element.gender == 2) {
+                    maleList.add(element);
+                  }
+                });
+                switch (selectedGender) {
+                  case 1:
+                    allList = femaleList;
+                    break;
+                  case 2:
+                    allList = maleList;
+                    break;
+                  default:
+                    allList = snapshot.data.results;
+                }
+                return new CarouselSlider.builder(
+                  itemCount: allList.length,
                   itemBuilder: (context, index) {
                     return Container(
                         child:
-                            _imageActorCarousel(snapshot.data.results, index));
+                        _imageActorCarousel(allList, index));
                   },
                   // items: listCarousel,
                   options: CarouselOptions(
@@ -416,7 +514,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 return Text("Connection not available");
               }
 
-              return CircularProgressIndicator();
+              return GeneralStyle.buildLinearProgressBar(context);
             }),
       ),
     ));
@@ -426,10 +524,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
         children: <Widget>[
           new GestureDetector(
               onTap: () {
+                print(results[index].id);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DetailPerson(id: results[index].id),
+                      builder: (context) {
+                        return DetailPerson(id: results[index].id);
+                      }
                   ),
                 );
               },

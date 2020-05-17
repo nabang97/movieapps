@@ -5,6 +5,9 @@ String getPosterImage(String input) {
   return "https://image.tmdb.org/t/p/original$input";
 }
 
+double searchBarHeight = 100;
+double menuHeight = 50;
+
 void addLanguages() async {
   MovieDatabase db = MovieDatabase();
   await Api().getLanguages().then((value) {
