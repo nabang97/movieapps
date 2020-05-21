@@ -2,11 +2,7 @@
 
 A new Flutter project.
 
-<img src="https://raw.githubusercontent.com/nabang97/movieapps/master/display/Screenshot_20200521-175615.jpg" width="400" height="790"><img src="https://drive.google.com/uc?id=1AU7oboZBD0ypUJRWgT_zRD1n_UleCR3w" width="400" height="790"><img src="https://drive.google.com/uc?id=1AZzYSV7-ICmJJcVgmHBVSY1qDq7H_fmt" width="400" height="790">
-
-![Image description](https://raw.githubusercontent.com/nabang97/movieapps/master/display/Screenshot_20200521-175615.jpg?v=4&s=200)
-![Image description](https://drive.google.com/uc?id=1AU7oboZBD0ypUJRWgT_zRD1n_UleCR3w)
-![Image description](https://drive.google.com/uc?id=1AZzYSV7-ICmJJcVgmHBVSY1qDq7H_fmt)
+<img src="https://raw.githubusercontent.com/nabang97/movieapps/master/display/Screenshot_20200521-175615.jpg" width="300"><img src="https://drive.google.com/uc?id=1AU7oboZBD0ypUJRWgT_zRD1n_UleCR3w" width="300"><img src="https://drive.google.com/uc?id=1AZzYSV7-ICmJJcVgmHBVSY1qDq7H_fmt" width="300">
 ## Getting Started
 
 This project is a starting point for a Flutter application.
