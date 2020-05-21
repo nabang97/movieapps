@@ -71,7 +71,7 @@ class _TvShowPageState extends State<TvShowPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        AppBarMovies(titleAppBar: 'TV Show'),
+        AppBarMovies(titleAppBar: 'TV SHOW'),
         Positioned(
             top: 100,
             left: 0,
@@ -192,12 +192,14 @@ class _TvShowPageState extends State<TvShowPage> {
                     tag: "${results[index].id}",
                     child: Material(
                       child: results[index].posterPath == null
-                          ? Image.asset('lib/images/user.png',
-                              width: 300, fit: BoxFit.cover)
+                          ? Image.asset('lib/images/miscellaneous.png',
+                          fit: BoxFit.contain,
+                          width: 300)
                           : CachedNetworkImage(
                               placeholder: (context, image) {
-                                return Image.asset('lib/images/user.png',
-                                    fit: BoxFit.cover, width: 300);
+                                return Image.asset(
+                                    'lib/images/miscellaneous.png',
+                                    fit: BoxFit.contain, width: 300);
                               },
                               imageUrl: getPosterImage(
                                   "${results[index].posterPath}"),
@@ -214,11 +216,11 @@ class _TvShowPageState extends State<TvShowPage> {
                                     ),
                                   ),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
-                              fit: BoxFit.cover,
+                                  Image.asset('lib/images/miscellaneous.png',
+                                      fit: BoxFit.contain,
                               width: 300),
                     ))),
-          ));
+            )));
 
   Widget _genreMenu() => Container(
         width: double.infinity,

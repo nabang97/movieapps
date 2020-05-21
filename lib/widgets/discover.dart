@@ -217,7 +217,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     // items: listCarousel,
                     options: CarouselOptions(
                         aspectRatio: 0.6,
-                        height: 500,
+                        height: 550,
                         enlargeCenterPage: true,
                         autoPlay: true),
                   );
@@ -258,7 +258,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         aspectRatio: 0.6,
                         enlargeCenterPage: true,
                         autoPlay: true,
-                        height: 500),
+                        height: 550),
                   );
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
@@ -285,6 +285,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
           },
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 30),
+
             decoration: new BoxDecoration(
               boxShadow: [
                 new BoxShadow(
@@ -304,18 +305,18 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     tag: "${results[index].id}",
                     child: Material(
                       child: results[index].posterPath == null
-                          ? Image.asset('lib/images/user.png',
-                              width: 300, fit: BoxFit.cover)
+                          ? Image.asset('lib/images/miscellaneous.png',
+                          fit: BoxFit.contain)
                           : CachedNetworkImage(
                               placeholder: (context, image) {
-                                return Image.asset('lib/images/user.png',
-                                    fit: BoxFit.cover, width: 300);
+                                return Image.asset(
+                                    'lib/images/miscellaneous.png',
+                                    fit: BoxFit.contain);
                               },
                               imageUrl: getPosterImage(
                                   "${results[index].posterPath}"),
                               imageBuilder: (context, imageProvider) =>
                                   Container(
-                                    width: 300,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: imageProvider,
@@ -327,8 +328,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                   ),
                               errorWidget: (context, url, error) =>
                                   Icon(Icons.error),
-                              fit: BoxFit.cover,
-                              width: 300),
+                          fit: BoxFit.cover),
                     ))),
           ));
 
@@ -364,14 +364,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       child: results[index].posterPath != null
                           ? CachedNetworkImage(
                               placeholder: (context, image) {
-                                return Image.asset('lib/images/user.png',
-                                    fit: BoxFit.cover, width: 300);
+                                return Image.asset(
+                                    'lib/images/miscellaneous.png',
+                                    fit: BoxFit.contain, scale: 2);
                               },
                               imageUrl: getPosterImage(
                                   "${results[index].posterPath}"),
                               imageBuilder: (context, imageProvider) =>
                                   Container(
-                                    width: 300,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: imageProvider,
@@ -384,9 +384,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
                               errorWidget: (context, url, error) =>
                                   Icon(Icons.error),
                               fit: BoxFit.cover,
-                              width: 300)
-                          : Image.asset('lib/images/user.png',
-                              width: 300, fit: BoxFit.cover),
+                      )
+                          : Image.asset('lib/images/miscellaneous.png',
+                          fit: BoxFit.contain, width: 300),
                     ))),
           ));
 
@@ -464,6 +464,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _buildActors() {
     return SingleChildScrollView(
         child: Container(
+
       child: Center(
         child: FutureBuilder<Persons>(
             future: futurePersons,
@@ -496,13 +497,15 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   itemCount: allList.length,
                   itemBuilder: (context, index) {
                     return Container(
+                        width: 350,
+                        height: 100,
                         child:
                         _imageActorCarousel(allList, index));
                   },
                   // items: listCarousel,
                   options: CarouselOptions(
-                      aspectRatio: 0.6,
-                      height: 560,
+                      aspectRatio: 3,
+                      height: 570,
                       enlargeCenterPage: true,
                       autoPlay: true),
                 );
@@ -542,28 +545,31 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         child: Material(
                           child: results[index].profilePath == null
                               ? Image.asset('lib/images/user.png',
-                                  width: 300, fit: BoxFit.cover)
+                            fit: BoxFit.cover, height: 200,)
                               : CachedNetworkImage(
                                   placeholder: (context, image) {
                                     return Image.asset('lib/images/user.png',
-                                        fit: BoxFit.cover, width: 300);
+                                        width: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width,
+                                        fit: BoxFit.contain);
                                   },
                                   imageUrl: getPosterImage(
                                       "${results[index].profilePath}"),
-                                  //                      imageBuilder: (context, imageProvider) => Container(
-                                  //                        width: 300,
-                                  //                        decoration: BoxDecoration(
-                                  //                          image: DecorationImage(
-                                  //                              image: imageProvider,
-                                  //                              fit: BoxFit.cover,
-                                  //                              colorFilter:
-                                  //                              ColorFilter.mode(Colors.pink, BlendMode.colorBurn)),
-                                  //                        ),
-                                  //                      ),
+//                                                        imageBuilder: (context, imageProvider) => Container(
+//                                                          width: 300,
+//                                                          decoration: BoxDecoration(
+//                                                            image: DecorationImage(
+//                                                                image: imageProvider,
+//                                                                fit: BoxFit.cover,
+//                                                                colorFilter:
+//                                                                ColorFilter.mode(Colors.pink, BlendMode.colorBurn)),
+//                                                          ),
+//                                                        ),
                                   errorWidget: (context, url, error) =>
                                       Icon(Icons.error),
-                                  fit: BoxFit.cover,
-                                  width: 300),
+                              fit: BoxFit.contain),
                         ))),
                 margin: EdgeInsets.symmetric(vertical: 30),
                 decoration: new BoxDecoration(
@@ -583,7 +589,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 ),
               )),
           Positioned(
-              top: 500,
+              top: 530,
               child: Text("${results[index].name}",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)))
         ],

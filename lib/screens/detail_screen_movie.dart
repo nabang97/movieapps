@@ -11,6 +11,8 @@ import 'package:movieapps/utils/api_key.dart';
 import 'package:movieapps/utils/database.dart';
 import 'package:movieapps/utils/global.dart';
 import 'package:movieapps/widgets/genre_detail_widget.dart';
+import 'package:movieapps/widgets/read_more_text.dart';
+import '../widgets/general_widget.dart' as GeneralStyle;
 
 class DetailMovieScreen extends StatefulWidget {
   final Result movie;
@@ -51,12 +53,23 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
       });
     }
     for (int i = 0; i < spokenLanguages.length; i++) {
-      if (spokenLanguages[i].iso == widget.movie.originalLanguage) {
+      if (spokenLanguages[i].iso == futureMovie.originalLanguage) {
         setState(() {
           language = spokenLanguages[i].name;
         });
       }
     }
+  }
+
+  String getLanguageName() {
+    for (int i = 0; i < spokenLanguages.length; i++) {
+      if (spokenLanguages[i].iso == futureMovie.originalLanguage) {
+        setState(() {
+          language = spokenLanguages[i].name;
+        });
+      }
+    }
+    return language;
   }
 
   void checkDB() async {
@@ -159,6 +172,7 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
     checkDB();
     checkCasts();
     getLanguage();
+    print(futureMovie.id);
   }
 
   @override
@@ -320,7 +334,7 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                                     color: Colors.black),
                                 children: <TextSpan>[
                                   TextSpan(
-                                      text: '/${widget.movie.originalLanguage}',
+                                      text: '/${futureMovie.originalLanguage}',
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal,
                                           fontSize: 15,
@@ -336,15 +350,32 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
             Container(
                 margin: EdgeInsets.only(left: 30, top: 5, right: 30),
                 alignment: Alignment.topLeft,
-                child: Text(
+                child:
+                ReadMoreText(
                   widget.movie.overview,
+                  trimLines: 6,
+                  colorClickableText: Colors.pink,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: '...Show more',
+                  trimExpandedText: ' show less',
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                       fontWeight: FontWeight.normal,
                       height: 1.5,
                       color: Colors.black54,
                       fontSize: 13),
-                )),
+
+                )
+//                Text(
+//                  widget.movie.overview,
+//                  textAlign: TextAlign.justify,
+//                  style: TextStyle(
+//                      fontWeight: FontWeight.normal,
+//                      height: 1.5,
+//                      color: Colors.black54,
+//                      fontSize: 13),
+//                )
+            ),
             _buildSubTitle("Casts"),
             Flexible(
                 fit: FlexFit.loose,

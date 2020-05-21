@@ -50,7 +50,7 @@ class _DetailTvScreenState extends State<DetailTvScreen> {
       });
     }
     for (int i = 0; i < spokenLanguages.length; i++) {
-      if (spokenLanguages[i].iso == widget.tv.originalLanguage) {
+      if (spokenLanguages[i].iso == futureTv.originalLanguage) {
         setState(() {
           language = spokenLanguages[i].name;
         });
@@ -282,7 +282,7 @@ class _DetailTvScreenState extends State<DetailTvScreen> {
                           color: Colors.black),
                       children: <TextSpan>[
                         TextSpan(
-                            text: '/${widget.tv.originalLanguage}',
+                            text: '/${futureTv.originalLanguage}',
                             style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 15,

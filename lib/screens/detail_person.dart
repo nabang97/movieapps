@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:movieapps/models/moviedetail.dart';
 import 'package:movieapps/models/person.dart';
+import 'package:movieapps/screens/detail_screen_tv.dart';
 import 'package:movieapps/utils/api_key.dart';
 import 'package:movieapps/utils/global.dart';
 import 'package:movieapps/widgets/read_more_text.dart';
@@ -219,7 +220,11 @@ class _DetailPersonState extends State<DetailPerson> {
               trimCollapsedText: '...Show more',
               trimExpandedText: ' show less',
               textAlign: TextAlign.justify,
-
+              style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  height: 1.5,
+                  color: Colors.black54,
+                  fontSize: 13),
 
             )
 
@@ -260,8 +265,9 @@ class _DetailPersonState extends State<DetailPerson> {
 
                           child: CachedNetworkImage(
                               placeholder: (context, image) {
-                                return Image.asset('lib/images/user.png',
-                                    fit: BoxFit.cover, height: 150);
+                                return Image.asset(
+                                    'lib/images/miscellaneous.png',
+                                    fit: BoxFit.contain, width: 90);
                               },
                               imageUrl: getPosterImage(
                                   "${personMovies.cast[index].movie.posterPath}"),
@@ -269,8 +275,9 @@ class _DetailPersonState extends State<DetailPerson> {
                           ),
                         ),
                       )
-                          : Image.asset('lib/images/user.png',
-                          height: 150, width: 100),
+                          : Image.asset(
+                          'lib/images/miscellaneous.png', fit: BoxFit.contain,
+                          height: 150, width: 90),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -301,17 +308,18 @@ class _DetailPersonState extends State<DetailPerson> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(12)),
 
-                      child: personTvs.cast[index].movie.posterPath != null
+                      child: personTvs.cast[index].tv.posterPath != null
                           ?
                       CachedNetworkImage(
                         placeholder: (context, image) {
-                          return Image.asset('lib/images/user.png',
-                              fit: BoxFit.cover);
+                          return Image.asset('lib/images/miscellaneous.png',
+                              fit: BoxFit.contain);
                         },
                         imageUrl: getPosterImage(
-                            "${personTvs.cast[index].movie.posterPath}"),
+                            "${personTvs.cast[index].tv.posterPath}"),
 
-                      ) : Image.asset('lib/images/user.png',
+                      ) : Image.asset(
+                          'lib/images/miscellaneous.png', fit: BoxFit.contain,
                           width: 90),
                     ),
                   ),
@@ -320,8 +328,8 @@ class _DetailPersonState extends State<DetailPerson> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              DetailMovieScreen(
-                                  personTvs.cast[index].movie)),
+                              DetailTvScreen(
+                                  personTvs.cast[index].tv)),
                     );
                   },
                 );

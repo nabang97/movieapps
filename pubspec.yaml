@@ -43,6 +43,7 @@ flutter:
   uses-material-design: true
   assets:
     - lib/images/user.png
+    - lib/images/miscellaneous.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -61,10 +62,12 @@ flutter:
         - asset: lib/fonts/Montserrat-Regular.ttf
         - asset: lib/fonts/Montserrat-Italic.ttf
           style: italic
+
     - family: Bangers
       fonts:
         - asset: lib/fonts/Bangers-Regular.ttf
           weight: 900
+
     - family: FasterOne
       fonts:
         - asset: lib/fonts/FasterOne-Regular.ttf

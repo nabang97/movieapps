@@ -64,8 +64,9 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        AppBarMovies(titleAppBar: 'Favorites'),
+        AppBarMovies(titleAppBar: 'FAVORITES'),
         Positioned(
+
             top: 100,
             left: 0,
             right: 0,

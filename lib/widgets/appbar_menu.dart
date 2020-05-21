@@ -11,13 +11,13 @@ class AppBarMovies extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      padding: EdgeInsets.only(top: 15),
+      padding: EdgeInsets.only(top: 10),
       child: AppBar(
         title: Center(
           child: Text(
             titleAppBar,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black54,
+            style: TextStyle(color: Colors.grey,
                 fontFamily: 'FasterOne',
                 fontWeight: FontWeight.bold),
           ),

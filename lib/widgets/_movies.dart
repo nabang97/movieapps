@@ -65,7 +65,7 @@ class _MoviesPageState extends State<MoviesPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        AppBarMovies(titleAppBar: 'Movie'),
+        AppBarMovies(titleAppBar: 'MOVIE'),
         Positioned(
             top: 100,
             left: 0,
@@ -109,6 +109,7 @@ class _MoviesPageState extends State<MoviesPage> {
                                   _onMenuTapped(index);
                                   _onSelectedMenu(_discoverOptions[index],
                                       _selectedGenreIndex);
+                                  _onSelectedGenre(null, null);
                                   log("menu : ${_discoverOptions[index]}");
                                 },
                               )),
@@ -137,7 +138,7 @@ class _MoviesPageState extends State<MoviesPage> {
                   // items: listCarousel,
                   options: CarouselOptions(
                       aspectRatio: 0.6,
-                      height: 500,
+                      height: 550,
                       enlargeCenterPage: true,
                       autoPlay: true),
                 );
@@ -186,18 +187,18 @@ class _MoviesPageState extends State<MoviesPage> {
                 tag: "${results[index].id}",
                 child: Material(
                   child: results[index].posterPath == null
-                      ? Image.asset('lib/images/user.png',
-                          width: 300, fit: BoxFit.cover)
+                      ? Image.asset('lib/images/miscellaneous.png',
+                      fit: BoxFit.contain)
                       : CachedNetworkImage(
                           placeholder: (context, image) {
-                            return Image.asset('lib/images/user.png',
-                                fit: BoxFit.cover, width: 300);
+                            return Image.asset('lib/images/miscellaneous.png',
+                                fit: BoxFit.contain, width: 300);
                           },
                           imageUrl:
                               getPosterImage("${results[index].posterPath}"),
                           imageBuilder: (context, imageProvider) => Container(
-                                width: 300,
-                                decoration: BoxDecoration(
+
+                            decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: imageProvider,
                                       fit: BoxFit.cover,

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:movieapps/models/movie.dart';
 import 'package:movieapps/models/person.dart';
 import 'package:movieapps/models/tvshow.dart';
+import 'package:movieapps/screens/detail_person.dart';
 import 'package:movieapps/screens/detail_screen_tv.dart';
 import 'package:movieapps/utils/api_key.dart';
 import 'package:movieapps/utils/global.dart';
@@ -149,12 +150,12 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         body: SingleChildScrollView(
             child: Column(children: <Widget>[
-          _buildSubTitle("Movie", heightMovie),
-          _buildMovieTv(heightMovie, widthContainer, movies, "movie"),
-          _buildSubTitle("Tv Shows", heightTv),
-          _buildMovieTv(heightTv, widthContainer, tvs, "tv"),
-          _buildSubTitle("Actors", heightPerson),
-          _buildPerson(heightPerson, widthContainer, persons),
+              _buildSubTitle("Movie", heightMovie),
+              _buildMovieTv(heightMovie, widthContainer, movies, "movie"),
+              _buildSubTitle("Tv Shows", heightTv),
+              _buildMovieTv(heightTv, widthContainer, tvs, "tv"),
+              _buildSubTitle("Actors", heightPerson),
+              _buildPerson(heightPerson, widthContainer, persons),
         ])));
   }
 
@@ -249,30 +250,45 @@ class _SearchScreenState extends State<SearchScreen> {
                     scrollDirection: Axis.horizontal,
                     itemCount: snapshot.data.results.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.only(
-                              left: 10,
-                              right: index == snapshot.data.results.length - 1
-                                  ? 10
-                                  : 0),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: snapshot.data.results[index].profilePath ==
+                      return new GestureDetector(
+                          child: Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.only(
+                                  left: 10,
+                                  right: index ==
+                                      snapshot.data.results.length - 1
+                                      ? 10
+                                      : 0),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: snapshot.data.results[index]
+                                      .profilePath ==
                                       null
-                                  ? Image.asset(
-                                      'lib/images/user.png',
-                                      width: widthContainer,
-                                      height: heightContainer,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : CachedNetworkImage(
-                                      imageUrl: getPosterImage(
-                                          "${snapshot.data.results[index].profilePath}"),
-                                      width: widthContainer,
-                                      height: heightContainer,
-                                      fit: BoxFit.cover,
-                                    )));
+                                      ? Image.asset(
+                                    'lib/images/user.png',
+                                    width: widthContainer,
+                                    height: heightContainer,
+                                    fit: BoxFit.cover,
+                                  )
+                                      : CachedNetworkImage(
+                                    imageUrl: getPosterImage(
+                                        "${snapshot.data.results[index]
+                                            .profilePath}"),
+                                    width: widthContainer,
+                                    height: heightContainer,
+                                    fit: BoxFit.cover,
+                                  ))),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailPerson(id: snapshot.data
+                                        .results[index].id),
+                              ),
+                            );
+                          }
+                      );
                     });
               }
 

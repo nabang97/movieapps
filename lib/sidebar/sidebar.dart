@@ -77,10 +77,19 @@ class _SideBarState extends State<SideBar>
                     color: Colors.pink,
                     child: Column(
                       children: <Widget>[
-                        SizedBox(height: 100),
+                        SizedBox(height: 100,
+                            child: Center(
+                                child: Text("WatchUs",
+                                  style: TextStyle(
+                                      fontSize: 35,
+                                      fontFamily: 'FasterOne',
+                                      color: Colors.white
+                                  ),)
+                            )
+                        ),
                         Divider(
-                          height: 64,
-                          thickness: 0.5,
+                          height: 10,
+                          thickness: 1,
                           color: Colors.white.withOpacity(0.3),
                           indent: 32,
                           endIndent: 32,
@@ -113,8 +122,8 @@ class _SideBarState extends State<SideBar>
                           },
                         ),
                         Divider(
-                          height: 64,
-                          thickness: 0.5,
+                          height: 10,
+                          thickness: 1,
                           color: Colors.white.withOpacity(0.3),
                           indent: 32,
                           endIndent: 32,
@@ -128,6 +137,15 @@ class _SideBarState extends State<SideBar>
                                 .add(NavigationEvents.FavoriteClickedEvent);
                           },
                         ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            alignment: Alignment.bottomCenter,
+                            child: Text("Developed by Nabang",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),

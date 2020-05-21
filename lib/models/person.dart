@@ -1,5 +1,6 @@
 import 'package:movieapps/models/genre.dart';
 import 'package:movieapps/models/moviedetail.dart';
+import 'package:movieapps/models/tvdetail.dart';
 
 class Persons {
   int page;
@@ -155,17 +156,47 @@ class PersonMovies {
 
 class PersonTvs {
   int id;
-  List<PersonCastMovie> cast;
+  List<PersonCastTv> cast;
   List<PersonCrewMovie> crew;
 
   PersonTvs({this.id, this.cast, this.crew});
 
   factory PersonTvs.fromJson(Map<String, dynamic> json) => PersonTvs(
       id: json['id'],
-      cast: List<PersonCastMovie>.from(
-          json['cast'].map((x) => PersonCastMovie.fromJson(x))),
+      cast: List<PersonCastTv>.from(
+          json['cast'].map((x) => PersonCastTv.fromJson(x))),
       crew: List<PersonCrewMovie>.from(
           json['crew'].map((x) => PersonCrewMovie.fromJson(x))));
+}
+
+class PersonCastTv {
+  int id;
+  String character;
+  ResultTv tv;
+
+  PersonCastTv({this.character, this.id, this.tv});
+
+  factory PersonCastTv.fromJson(Map<String, dynamic> json) =>
+      PersonCastTv(
+          character: json['character'],
+          id: json['id'],
+          tv: ResultTv(
+              popularity: json['popularity'].toDouble(),
+              voteCount: json['vote_count'],
+              voteAverage: json['vote_average'].toDouble(),
+              name: json['name'],
+              originalLanguage: json['original_language'],
+              originalName: json['original_name'],
+              id: json['id'],
+              firstAirDate: json['first_air_date'],
+              backdropPath: json['backdrop_path'],
+              overview: json['overview'],
+              posterPath: json['poster_path'],
+              genres: json['genre_ids'] != null
+                  ? List<GenreModel>.from(
+                  json['genre_ids'].map((x) => GenreModel.getJson(x)))
+                  : List<GenreModel>(),
+              favorite: false));
 }
 
 class PersonCastMovie {
@@ -186,12 +217,13 @@ class PersonCastMovie {
               adult: json['adult'],
               voteAverage: json['vote_average'].toDouble(),
               title: json['title'],
-              originalLanguage: json[' original_language'],
+              originalLanguage: json['original_language'],
               originalTitle: json['original_title'],
               id: json['id'],
               backdropPath: json['backdrop_path'],
               overview: json['overview'],
               posterPath: json['poster_path'],
+
               genres: json['genre_ids'] != null
                   ? List<GenreModel>.from(
                       json['genre_ids'].map((x) => GenreModel.getJson(x)))
