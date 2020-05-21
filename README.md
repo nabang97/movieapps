@@ -2,9 +2,9 @@
 
 A new Flutter project.
 
-![Image description](https://drive.google.com/uc?id=1ASE25Cyqd-OrFq759Tmknj64hqZHUDf9 | width=100)
-![Image description](https://drive.google.com/uc?id=1AU7oboZBD0ypUJRWgT_zRD1n_UleCR3w | width=100)
-![Image description](https://drive.google.com/uc?id=1AZzYSV7-ICmJJcVgmHBVSY1qDq7H_fmt | width=100)
+![Image description](https://drive.google.com/uc?id=1ASE25Cyqd-OrFq759Tmknj64hqZHUDf9){:height="50%" width="50%"}
+![Image description](https://drive.google.com/uc?id=1AU7oboZBD0ypUJRWgT_zRD1n_UleCR3w)
+![Image description](https://drive.google.com/uc?id=1AZzYSV7-ICmJJcVgmHBVSY1qDq7H_fmt)
 ## Getting Started
 
 This project is a starting point for a Flutter application.
