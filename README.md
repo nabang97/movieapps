@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-![Image description](https://drive.google.com/uc?id=1ASE25Cyqd-OrFq759Tmknj64hqZHUDf9){:height="50%" width="50%"}
+![Image description](https://raw.githubusercontent.com/nabang97/movieapps/master/display/Screenshot_20200521-175615.jpg?v=4&s=200)
 ![Image description](https://drive.google.com/uc?id=1AU7oboZBD0ypUJRWgT_zRD1n_UleCR3w)
 ![Image description](https://drive.google.com/uc?id=1AZzYSV7-ICmJJcVgmHBVSY1qDq7H_fmt)
 ## Getting Started
